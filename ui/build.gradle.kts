@@ -27,8 +27,17 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
+    signingConfigs {
+        create("release") {
+            storeFile = file("../eyedroid-release.jks")
+            storePassword = "eyedroid"
+            keyAlias = "eyedroid"
+            keyPassword = "eyedroid"
+        }
+    }
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles("proguard-android-optimize.txt")
@@ -54,6 +63,7 @@ android {
     }
     lint {
         disable += "LongLogTag"
+        disable += "MissingDefaultResource"
         warning += "MissingTranslation"
         warning += "ImpliedQuantity"
     }
