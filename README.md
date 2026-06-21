@@ -344,6 +344,8 @@ apksigner verify --verbose ui/build/outputs/apk/release/ui-release.apk
 
 Setiap tenant mendapat APK tersendiri dengan `tenantId` yang sudah tertanam di dalam binary (via `BuildConfig.TENANT_ID`). Build semua tenant dilakukan dalam **satu perintah** menggunakan script `build_apks.sh`.
 
+> **Catatan:** Build flavor **akan menggantikan (override)** `DEFAULT_TENANT` yang hardcoded di `AppConfig.kt`. Nilai `TENANT_ID` dan `TENANT_NAME` sepenuhnya ditentukan oleh flavor yang di-build — bukan dari file konfigurasi statis.
+
 ### Cara Kerja
 
 ```
@@ -351,12 +353,19 @@ build_apks.sh
     │
     ▼
 GET http://perumdati.tech/api/auth/tenants
-    │  → ["system", "perumda-ti", ...]
+    │  → [{ "id": "system", "name": "EyeDroid" }, { "id": "perumda-ti", "name": "Perumda TI" }]
     ▼
-./gradlew :ui:assembleRelease -PtenantFlavors="system,perumda-ti"
+./gradlew :ui:assembleRelease
+    -PtenantFlavors="system,perumda-ti"
+    -PtenantNames="EyeDroid|Perumda TI"
     │
-    ├─ ui-system-release.apk        (BuildConfig.TENANT_ID = "system")
-    └─ ui-perumda_ti-release.apk    (BuildConfig.TENANT_ID = "perumda-ti")
+    ├─ ui-system-release.apk
+    │    BuildConfig.TENANT_ID   = "system"
+    │    BuildConfig.TENANT_NAME = "EyeDroid"
+    │
+    └─ ui-perumda_ti-release.apk
+         BuildConfig.TENANT_ID   = "perumda-ti"
+         BuildConfig.TENANT_NAME = "Perumda TI"
     │
     ▼
 /root/scrcpy/public/apk/
@@ -380,6 +389,19 @@ cd /root/eyedroid-wg-apk
 ### Tenant Baru Otomatis
 
 Saat tenant baru dibuat via scrcpy-ui, cukup jalankan ulang `build_apks.sh`. APK baru akan ter-build dan langsung tersedia untuk didownload.
+
+### Backend API (scrcpy)
+
+APK di-serve dan di-upload via backend scrcpy. Source code backend tersedia di:
+
+> 🔗 **[github.com/snipkode/scrcpy](https://github.com/snipkode/scrcpy)**
+
+Endpoint yang digunakan:
+| Method | Endpoint | Keterangan |
+|---|---|---|
+| `GET` | `/api/auth/tenants` | Fetch daftar tenant untuk build flavor |
+| `GET` | `/apk/:tenantId` | Download APK per tenant |
+| `POST` | `/api/admin/apk/:tenantId` | Upload APK hasil build (auth superadmin) |
 
 ---
 
