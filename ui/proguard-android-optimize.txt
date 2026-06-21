@@ -1,6 +1,25 @@
 # Keep Gson data model field names (prevents R8 renaming breaking JSON serialization)
 -keepclassmembers class com.eyedroid.vpn.data.model.** { <fields>; }
 
+# Retrofit
+-keepattributes Signature, Exceptions
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+
+# Gson
+-keepattributes EnclosingMethod
+-keep class com.google.gson.** { *; }
+-keep class sun.misc.Unsafe { *; }
+
+# OkHttp
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-keep class okhttp3.internal.** { *; }
+
 -allowaccessmodification
 -dontusemixedcaseclassnames
 -dontobfuscate

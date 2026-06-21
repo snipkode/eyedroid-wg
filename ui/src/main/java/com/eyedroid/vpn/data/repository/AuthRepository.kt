@@ -1,7 +1,6 @@
 package com.eyedroid.vpn.data.repository
 
 import com.eyedroid.vpn.AppConfig
-import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.data.api.RetrofitClient
 import com.eyedroid.vpn.data.model.LoginRequest
 import com.eyedroid.vpn.data.session.SessionManager
@@ -13,9 +12,13 @@ class AuthRepository(private val session: SessionManager) {
             LoginRequest(AppConfig.TENANT_ID, username, password)
         )
         if (!resp.isSuccessful) {
-            val errorBody = resp.errorBody()?.string() ?: "(empty)"
-            val debugInfo = if (BuildConfig.DEBUG) "\n[${resp.code()}] $errorBody" else ""
-            error("Login failed (${resp.code()})$debugInfo")
+            val errorBody = resp.errorBody()?.string()?.trim() ?: ""
+            // Try extract "message" or "error" field from JSON error body
+            val apiMsg = runCatching {
+                val j = org.json.JSONObject(errorBody)
+                j.optString("message").ifBlank { j.optString("error") }.ifBlank { null }
+            }.getOrNull()
+            error(apiMsg ?: "Login failed (${resp.code()})")
         }
         val body = resp.body() ?: error("Empty response")
         session.token = body.token
