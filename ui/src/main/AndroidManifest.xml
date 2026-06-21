@@ -34,12 +34,19 @@
             android:name="com.eyedroid.vpn.ui.login.LoginActivity"
             android:exported="true"
             android:theme="@style/SplashTheme"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Launcher alias — disabled after VPN connects to hide icon from home screen -->
+        <activity-alias
+            android:name="com.eyedroid.vpn.ui.login.LoginActivityAlias"
+            android:targetActivity="com.eyedroid.vpn.ui.login.LoginActivity"
+            android:exported="true"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <activity
             android:name="com.eyedroid.vpn.ui.dashboard.DashboardActivity"
