@@ -340,16 +340,19 @@ apksigner verify --verbose ui/build/outputs/apk/release/ui-release.apk
 
 ## Konfigurasi
 
-### `AppConfig.kt`
+### Ganti Backend URL
+
+Edit **satu file**: `ui/src/main/java/com/eyedroid/vpn/AppConfig.kt`
 
 ```kotlin
 object AppConfig {
-    const val BASE_URL = "http://perumdati.tech/apio/"
+    const val BASE_URL = "https://url-backend-kamu.com/api/"  // ← ganti di sini
     const val DEFAULT_TENANT = "system"
 }
 ```
 
-Untuk mengganti backend URL, cukup ubah `BASE_URL` di file ini.
+> Semua request (login, validasi session, ambil config VPN) otomatis menggunakan `BASE_URL` ini.  
+> Tidak perlu mengubah file lain.
 
 ### `gradle.properties`
 
