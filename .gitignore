@@ -5,6 +5,10 @@ build/
 *.aab
 *.aar
 
+# CMake / NDK build cache
+tunnel/.cxx/
+.cxx/
+
 # Android Studio
 .idea/
 *.iml
@@ -13,27 +17,20 @@ local.properties
 
 # Gradle
 .gradle/
-gradle.properties.local
 
 # Keystore — JANGAN PERNAH COMMIT
 *.jks
 *.keystore
 *.p12
-keystore.properties
-
-# Environment secrets
-.env
-*.env.local
 
 # macOS
 .DS_Store
 
-# NDK
-obj/
-.externalNativeBuild/
+# Kotlin errors
+.kotlin/
 
-# Debug symbols
-*.so.dbg
-
-# WireGuard Go build artifacts
-tunnel/tools/libwg-go/
+# Stray files from build output
+A
+Get
+Run
+Task

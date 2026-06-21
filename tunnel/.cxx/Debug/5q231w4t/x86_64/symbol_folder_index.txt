@@ -1,1 +1,0 @@
-/root/wireguard-android-1.0.20260315/tunnel/build/intermediates/cxx/Debug/5q231w4t/obj/x86_64
