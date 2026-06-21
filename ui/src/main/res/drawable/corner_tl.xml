@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Top-left: hanya border top + left -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- top line -->
+    <item android:bottom="36dp"><shape><solid android:color="#33C3F5FF"/></shape></item>
+    <!-- left line -->
+    <item android:right="36dp"><shape><solid android:color="#33C3F5FF"/></shape></item>
+    <!-- mask center -->
+    <item android:top="2dp" android:left="2dp"><shape><solid android:color="#051424"/></shape></item>
+</layer-list>

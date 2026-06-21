@@ -2,19 +2,33 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <data/>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ed_bg"
-    android:fitsSystemWindows="true">
+    android:background="@color/ed_bg">
 
-    <!-- Animated tech background (drawn via custom view) -->
+    <!-- Grid background drawn by custom view -->
     <com.eyedroid.vpn.ui.login.TechParticleView
         android:id="@+id/particleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Scrollable content — moves up when keyboard appears -->
+    <!-- Decorative corner brackets -->
+    <View android:layout_width="40dp" android:layout_height="40dp"
+        android:layout_gravity="top|start" android:layout_margin="20dp"
+        android:background="@drawable/corner_tl" />
+    <View android:layout_width="40dp" android:layout_height="40dp"
+        android:layout_gravity="top|end" android:layout_margin="20dp"
+        android:background="@drawable/corner_tr" />
+    <View android:layout_width="40dp" android:layout_height="40dp"
+        android:layout_gravity="bottom|start" android:layout_margin="20dp"
+        android:background="@drawable/corner_bl" />
+    <View android:layout_width="40dp" android:layout_height="40dp"
+        android:layout_gravity="bottom|end" android:layout_margin="20dp"
+        android:background="@drawable/corner_br" />
+
+    <!-- Main content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,141 +40,174 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="80dp"
-            android:paddingBottom="32dp"
+            android:paddingHorizontal="28dp"
+            android:paddingTop="72dp"
+            android:paddingBottom="40dp"
             android:minHeight="600dp">
 
             <!-- Logo -->
             <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
                 android:src="@mipmap/ic_launcher"
                 android:contentDescription="@string/app_name"
-                android:layout_marginBottom="14dp" />
+                android:layout_marginBottom="16dp" />
 
-            <!-- App name -->
+            <!-- Title: Access Interface -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
+                android:text="Access Interface"
                 android:textColor="@color/ed_text_primary"
-                android:textSize="22sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:letterSpacing="-0.02"
+                android:layout_marginBottom="6dp" />
 
-            <!-- Tenant badge -->
+            <!-- Subtitle: Neural Link Secured -->
             <TextView
                 android:id="@+id/tvTenantBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_tenant_badge"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="5dp"
                 android:text="@string/tenant_badge_default"
-                android:textColor="@color/ed_accent"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.06"
-                android:layout_marginBottom="32dp" />
+                android:textColor="#99BAC9CC"
+                android:textSize="10sp"
+                android:textAllCaps="true"
+                android:letterSpacing="0.15"
+                android:layout_marginBottom="36dp" />
 
-            <!-- Login card -->
-            <androidx.cardview.widget.CardView
+            <!-- Glass panel card -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#CC161616"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                android:orientation="vertical"
+                android:background="@drawable/bg_glass_panel"
+                android:padding="24dp">
 
-                <LinearLayout
+                <!-- Droid ID label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DROID ID"
+                    android:textColor="#CC00E5FF"
+                    android:textSize="10sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginStart="2dp" />
+
+                <!-- Username input -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilUsername"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="22dp">
+                    android:layout_marginBottom="20dp"
+                    app:startIconDrawable="@drawable/ic_fingerprint"
+                    app:startIconTint="@color/ed_text_secondary"
+                    app:boxStrokeColor="@color/ed_accent"
+                    app:boxStrokeWidth="1dp"
+                    app:boxBackgroundColor="#010F1F"
+                    app:hintEnabled="false">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilUsername"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="@string/hint_username"
-                        app:boxStrokeColor="@color/ed_accent"
-                        app:boxBackgroundColor="@color/ed_bg_secondary"
-                        app:hintTextColor="@color/ed_text_secondary">
+                        android:hint="ED-0000-X"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:textColor="@color/ed_text_primary"
+                        android:textColorHint="#4DBAC9CC"
+                        android:fontFamily="monospace"
+                        android:textSize="13sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etUsername"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:imeOptions="actionNext"
-                            android:singleLine="true"
-                            android:textColor="@color/ed_text_primary"
-                            android:textColorHint="@color/ed_text_muted" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                <!-- Access Key label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACCESS KEY"
+                    android:textColor="#CC00E5FF"
+                    android:textSize="10sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginStart="2dp" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilPassword"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                <!-- Password input -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPassword"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:startIconDrawable="@drawable/ic_key"
+                    app:startIconTint="@color/ed_text_secondary"
+                    app:endIconMode="password_toggle"
+                    app:boxStrokeColor="@color/ed_accent"
+                    app:boxStrokeWidth="1dp"
+                    app:boxBackgroundColor="#010F1F"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:hint="@string/hint_password"
-                        app:endIconMode="password_toggle"
-                        app:boxStrokeColor="@color/ed_accent"
-                        app:boxBackgroundColor="@color/ed_bg_secondary"
-                        app:hintTextColor="@color/ed_text_secondary">
+                        android:hint="••••••••"
+                        android:inputType="textPassword"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textColor="@color/ed_text_primary"
+                        android:textColorHint="#4DBAC9CC"
+                        android:fontFamily="monospace"
+                        android:textSize="13sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etPassword"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPassword"
-                            android:imeOptions="actionDone"
-                            android:singleLine="true"
-                            android:textColor="@color/ed_text_primary"
-                            android:textColorHint="@color/ed_text_muted" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                <!-- Connect button -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
 
-                    <FrameLayout
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp">
+                        android:layout_height="52dp"
+                        android:text="CONNECT"
+                        android:textColor="@color/ed_accent"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.2"
+                        app:backgroundTint="#00626E"
+                        app:strokeColor="@color/ed_accent"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="8dp" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnLogin"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:text="@string/btn_login"
-                            android:textColor="@color/ed_text_primary"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            app:backgroundTint="@color/ed_accent"
-                            app:cornerRadius="12dp" />
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:indeterminateTint="@color/ed_accent" />
+                </FrameLayout>
 
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:layout_gravity="center"
-                            android:visibility="gone"
-                            android:indeterminateTint="@color/ed_text_primary" />
-                    </FrameLayout>
+            </LinearLayout>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Footer -->
+            <!-- Version info -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/login_footer"
-                android:textColor="@color/ed_text_muted"
-                android:textSize="10sp" />
+                android:layout_marginTop="28dp"
+                android:text="EYEDROID CORE v4.0.0-STABLE"
+                android:textColor="#4DBAC9CC"
+                android:textSize="9sp"
+                android:letterSpacing="0.25"
+                android:textAllCaps="true" />
 
         </LinearLayout>
     </ScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>
 </layout>

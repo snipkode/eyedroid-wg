@@ -12,23 +12,21 @@ import com.wireguard.config.Config
 
 class VpnRefreshWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
 
-    override suspend fun doWork(): Result {
-        val context = applicationContext
-        RetrofitClient.init(context)
-        val session = SessionManager(context)
+    override suspend fun doWork(): Result = runCatching {
+        RetrofitClient.init(applicationContext)
+        val session = SessionManager(applicationContext)
         if (!session.isLoggedIn) return Result.success()
 
-        return VpnRepository(session).fetchConfig().fold(
-            onSuccess = { configText ->
-                runCatching {
-                    val wgConfig = Config.parse(configText.reader().buffered())
-                    val manager = Application.getTunnelManager()
-                    val tunnel = manager.getTunnels()["eyedroid"] ?: return Result.success()
-                    manager.setTunnelConfig(tunnel, wgConfig)
-                    manager.setTunnelState(tunnel, Tunnel.State.UP)
-                }.fold({ Result.success() }, { Result.retry() })
-            },
-            onFailure = { Result.retry() }
-        )
-    }
+        val configText = VpnRepository(session).fetchConfig().getOrElse { return Result.retry() }
+        val wgConfig = Config.parse(configText.reader().buffered())
+
+        // TunnelManager may be unavailable if process was restarted by OS
+        val manager = runCatching { Application.getTunnelManager() }.getOrNull()
+            ?: return Result.success()
+
+        val tunnel = manager.getTunnels()["eyedroid"] ?: return Result.success()
+        manager.setTunnelConfig(tunnel, wgConfig)
+        manager.setTunnelState(tunnel, Tunnel.State.UP)
+        Result.success()
+    }.getOrElse { Result.retry() }
 }

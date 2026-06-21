@@ -276,7 +276,7 @@
     <string name="vpn_notification_title">EyeDroid VPN</string>
     <string name="vpn_notification_connected">VPN Connected</string>
     <string name="vpn_notification_disconnected">VPN Disconnected</string>
-    <string name="tenant_badge_default">EyeDroid</string>
+    <string name="tenant_badge_default">Neural Link Secured</string>
     <string name="login_subtitle">Secure enterprise VPN</string>
     <string name="login_footer">Protected by EyeDroid · Enterprise VPN</string>
     <string name="vpn_status_label">VPN Status</string>
