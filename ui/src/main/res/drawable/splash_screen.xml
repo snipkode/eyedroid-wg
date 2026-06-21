@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#1E1B4B"
+                android:centerColor="#312E81"
+                android:endColor="#0F0F0F" />
+        </shape>
+    </item>
+    <!-- Centered logo -->
+    <item
+        android:gravity="center"
+        android:width="96dp"
+        android:height="96dp"
+        android:drawable="@mipmap/ic_launcher" />
+</layer-list>

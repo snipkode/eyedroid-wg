@@ -47,6 +47,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- Splash theme: shown instantly before LoginActivity inflates -->
+    <style name="SplashTheme" parent="EyeDroidTheme">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
     <!-- EyeDroid fullscreen dark theme — no action bar, transparent status bar -->
     <style name="EyeDroidTheme" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>

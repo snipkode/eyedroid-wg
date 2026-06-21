@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.eyedroid.vpn.BuildConfig
+import com.eyedroid.vpn.R
 import com.eyedroid.vpn.databinding.ActivityLoginBinding
 import com.eyedroid.vpn.ui.dashboard.DashboardActivity
 import com.eyedroid.vpn.util.SecurityCheck
@@ -18,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
     private val vm: LoginViewModel by viewModels { LoginViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.EyeDroidTheme) // dismiss splash, apply real theme
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         window.decorView.systemUiVisibility = (
