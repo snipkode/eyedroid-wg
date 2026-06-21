@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="internalOnly">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <permission
+        android:name="${applicationId}.permission.CONTROL_TUNNELS"
+        android:description="@string/permission_description"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/permission_label"
+        android:protectionLevel="dangerous" />
+
+    <application
+        android:name="com.wireguard.android.Application"
+        android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:fullBackupContent="false"
+        tools:replace="android:fullBackupContent">
+
+        <!-- EyeDroid: Login is the entry point -->
+        <activity
+            android:name="com.eyedroid.vpn.ui.login.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.eyedroid.vpn.ui.dashboard.DashboardActivity"
+            android:exported="false" />
+
+        <!-- WireGuard internal: TunnelToggleActivity (used by quick settings) -->
+        <activity
+            android:name="com.wireguard.android.activity.TunnelToggleActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@style/NoBackgroundTheme" />
+
+        <!-- WireGuard VPN Service — must be exported for Android VPN framework -->
+        <service
+            android:name="com.wireguard.android.backend.GoBackend$VpnService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+        <!-- Boot receiver to restore VPN state -->
+        <receiver
+            android:name="com.wireguard.android.BootShutdownReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Tunnel control receiver — protected by custom permission -->
+        <receiver
+            android:name="com.wireguard.android.model.TunnelManager$IntentReceiver"
+            android:exported="false"
+            android:permission="${applicationId}.permission.CONTROL_TUNNELS">
+            <intent-filter>
+                <action android:name="com.wireguard.android.action.REFRESH_TUNNEL_STATES" />
+                <action android:name="com.wireguard.android.action.SET_TUNNEL_UP" />
+                <action android:name="com.wireguard.android.action.SET_TUNNEL_DOWN" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/app_restrictions" />
+
+    </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+</manifest>

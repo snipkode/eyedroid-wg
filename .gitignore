@@ -1,0 +1,39 @@
+# Build outputs
+build/
+*/build/
+*.apk
+*.aab
+*.aar
+
+# Android Studio
+.idea/
+*.iml
+*.iws
+local.properties
+
+# Gradle
+.gradle/
+gradle.properties.local
+
+# Keystore — JANGAN PERNAH COMMIT
+*.jks
+*.keystore
+*.p12
+keystore.properties
+
+# Environment secrets
+.env
+*.env.local
+
+# macOS
+.DS_Store
+
+# NDK
+obj/
+.externalNativeBuild/
+
+# Debug symbols
+*.so.dbg
+
+# WireGuard Go build artifacts
+tunnel/tools/libwg-go/
