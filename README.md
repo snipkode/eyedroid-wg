@@ -30,6 +30,7 @@
 - [Persyaratan Build](#persyaratan-build)
 - [Build Debug](#build-debug)
 - [Build Release & Signing](#build-release--signing)
+- [Build Satu Tenant (build_one.sh)](#build-satu-tenant-build_onesh)
 - [Build Multi-Tenant (Build Flavors)](#build-multi-tenant-build-flavors)
 - [APK Download via scrcpy-ui](#apk-download-via-scrcpy-ui)
 - [📋 Build Variants Reference](BUILD_VARIANTS.md)
@@ -338,6 +339,40 @@ export KEY_PASS=your_key_password
 ```bash
 apksigner verify --verbose ui/build/outputs/apk/release/ui-release.apk
 ```
+
+---
+
+## Build Satu Tenant (`build_one.sh`)
+
+Untuk build APK satu tenant saja dengan `tenantId` dan `Tenant Name` yang ditentukan secara eksplisit — tanpa fetch API.
+
+```bash
+# Format
+./build_one.sh <tenantId> "<Tenant Name>" [OUTPUT_DIR]
+
+# Contoh
+./build_one.sh perumda-ti "Perumda TI"
+./build_one.sh system "EyeDroid"
+./build_one.sh bpd-jabar "BPD Jabar" /tmp/apk-out
+
+# Upload langsung ke server
+APK_UPLOAD_URL=http://perumdati.tech APK_UPLOAD_TOKEN=<jwt> \
+  ./build_one.sh perumda-ti "Perumda TI"
+```
+
+Output APK:
+```
+/root/scrcpy/public/apk/
+├── eyedroid-perumda-ti.apk         ← release
+└── eyedroid-perumda-ti-debug.apk   ← debug
+```
+
+| Aspek | `build_one.sh` | `build_apks.sh` |
+|---|---|---|
+| Input tenant | Argumen CLI | Fetch dari API |
+| Jumlah tenant | Satu | Semua |
+| Kecepatan | Lebih cepat | Build semua |
+| Use case | Build ulang tenant tertentu | Full deployment |
 
 ---
 
