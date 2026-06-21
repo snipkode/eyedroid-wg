@@ -1,6 +1,7 @@
 package com.eyedroid.vpn.data.repository
 
 import com.eyedroid.vpn.AppConfig
+import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.data.api.RetrofitClient
 import com.eyedroid.vpn.data.model.LoginRequest
 import com.eyedroid.vpn.data.session.SessionManager
@@ -11,7 +12,11 @@ class AuthRepository(private val session: SessionManager) {
         val resp = RetrofitClient.api.login(
             LoginRequest(AppConfig.DEFAULT_TENANT, username, password)
         )
-        if (!resp.isSuccessful) error("Login failed (${resp.code()})")
+        if (!resp.isSuccessful) {
+            val errorBody = resp.errorBody()?.string() ?: "(empty)"
+            val debugInfo = if (BuildConfig.DEBUG) "\n[${resp.code()}] $errorBody" else ""
+            error("Login failed (${resp.code()})$debugInfo")
+        }
         val body = resp.body() ?: error("Empty response")
         session.token = body.token
         session.username = body.user.username
