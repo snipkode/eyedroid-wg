@@ -24,7 +24,7 @@ android {
     externalNativeBuild {
         cmake {
             path("tools/CMakeLists.txt")
-            version = "3.4.1+"
+            version = "3.22.1"
         }
     }
     testOptions.unitTests.all {

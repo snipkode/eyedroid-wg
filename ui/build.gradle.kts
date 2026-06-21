@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // DataBinding runtime — needed by WireGuard model classes (BaseObservable, ObservableField)
+    implementation("androidx.databinding:databinding-runtime:8.10.1")
 }
 
 tasks.withType<JavaCompile>().configureEach {

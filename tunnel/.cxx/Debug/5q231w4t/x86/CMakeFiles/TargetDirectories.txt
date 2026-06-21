@@ -1,0 +1,6 @@
+/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86/CMakeFiles/libwg-quick.so.dir
+/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86/CMakeFiles/libwg.so.dir
+/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86/CMakeFiles/libwg-go.so.dir
+/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86/CMakeFiles/elf-cleaner.dir
+/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86/CMakeFiles/edit_cache.dir
+/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86/CMakeFiles/rebuild_cache.dir

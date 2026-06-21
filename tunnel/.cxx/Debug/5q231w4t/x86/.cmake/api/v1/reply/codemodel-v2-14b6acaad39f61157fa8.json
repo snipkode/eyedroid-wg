@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "WireGuard",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "elf-cleaner::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-elf-cleaner-Debug-04e6a1c1fe683c8584d5.json",
+					"name" : "elf-cleaner",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libwg-go.so::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libwg-go.so-Debug-07df81b009f613c63055.json",
+					"name" : "libwg-go.so",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libwg-quick.so::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libwg-quick.so-Debug-190941fb27e6d8af732f.json",
+					"name" : "libwg-quick.so",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libwg.so::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libwg.so-Debug-eb5e3aefad8ad0400086.json",
+					"name" : "libwg.so",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/root/wireguard-android-1.0.20260315/tunnel/.cxx/Debug/5q231w4t/x86",
+		"source" : "/root/wireguard-android-1.0.20260315/tunnel/tools"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

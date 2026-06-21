@@ -4,6 +4,9 @@
  */
 package com.wireguard.android
 
+import com.eyedroid.vpn.BuildConfig
+import com.eyedroid.vpn.R
+
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -22,7 +25,6 @@ import com.wireguard.android.backend.GoBackend
 import com.wireguard.android.backend.WgQuickBackend
 import com.wireguard.android.configStore.FileConfigStore
 import com.wireguard.android.model.TunnelManager
-import com.wireguard.android.updater.Updater
 import com.wireguard.android.util.RootShell
 import com.wireguard.android.util.ToolsInstaller
 import com.wireguard.android.util.UserKnobs
@@ -116,7 +118,6 @@ class Application : android.app.Application() {
                 Log.e(TAG, Log.getStackTraceString(e))
             }
         }
-        // Updater.monitorForUpdates() — disabled for EyeDroid
 
         if (BuildConfig.DEBUG) {
             StrictMode.setVmPolicy(VmPolicy.Builder().detectAll().penaltyLog().build())
