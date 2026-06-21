@@ -112,7 +112,6 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.localbroadcastmanager)
-    implementation(libs.androidx.work.runtime.ktx)
     // DataBinding runtime — needed by WireGuard model classes (BaseObservable, ObservableField)
     implementation("androidx.databinding:databinding-runtime:8.10.1")
 }

@@ -6,9 +6,9 @@ import android.net.VpnService
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.R
