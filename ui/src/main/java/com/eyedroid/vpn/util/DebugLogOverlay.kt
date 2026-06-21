@@ -8,7 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.widget.ScrollView
 import android.widget.TextView
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.core.content.ContextCompat
 import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.data.api.DebugInterceptor
 
@@ -34,13 +34,17 @@ object DebugLogOverlay {
                     .show()
             }
         }
-        LocalBroadcastManager.getInstance(activity)
-            .registerReceiver(receiver, IntentFilter(DebugInterceptor.ACTION_LOG))
+        ContextCompat.registerReceiver(
+            activity,
+            receiver,
+            IntentFilter(DebugInterceptor.ACTION_LOG),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         return receiver
     }
 
     fun unregister(activity: Activity, receiver: BroadcastReceiver?) {
         if (receiver == null) return
-        LocalBroadcastManager.getInstance(activity).unregisterReceiver(receiver)
+        activity.unregisterReceiver(receiver)
     }
 }

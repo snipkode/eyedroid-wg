@@ -1,7 +1,6 @@
 package com.eyedroid.vpn.data.api
 
 import android.content.Context
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.eyedroid.vpn.AppConfig
 import com.eyedroid.vpn.BuildConfig
 import okhttp3.OkHttpClient
@@ -18,9 +17,7 @@ object RetrofitClient {
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
         if (BuildConfig.DEBUG) {
-            builder.addInterceptor(
-                DebugInterceptor(LocalBroadcastManager.getInstance(context))
-            )
+            builder.addInterceptor(DebugInterceptor(context.applicationContext))
         }
         _api = Retrofit.Builder()
             .baseUrl(AppConfig.BASE_URL)

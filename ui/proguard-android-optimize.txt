@@ -1,3 +1,6 @@
+# Keep Gson data model field names (prevents R8 renaming breaking JSON serialization)
+-keepclassmembers class com.eyedroid.vpn.data.model.** { <fields>; }
+
 -allowaccessmodification
 -dontusemixedcaseclassnames
 -dontobfuscate

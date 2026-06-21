@@ -1,13 +1,13 @@
 package com.eyedroid.vpn.data.api
 
+import android.content.Context
 import android.content.Intent
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 
-class DebugInterceptor(private val lbm: LocalBroadcastManager) : Interceptor {
+class DebugInterceptor(private val context: Context) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val req = chain.request()
@@ -25,7 +25,7 @@ class DebugInterceptor(private val lbm: LocalBroadcastManager) : Interceptor {
             append("\n📥 Response [${response.code}]:\n$rawBody")
         }
 
-        lbm.sendBroadcast(Intent(ACTION_LOG).putExtra(EXTRA_LOG, log))
+        context.sendBroadcast(Intent(ACTION_LOG).putExtra(EXTRA_LOG, log))
 
         return response.newBuilder()
             .body(rawBody.toResponseBody(contentType))
