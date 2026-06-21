@@ -1,5 +1,6 @@
 package com.eyedroid.vpn.ui.login
 
+import android.content.BroadcastReceiver
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,29 +10,33 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.R
+import com.eyedroid.vpn.data.api.RetrofitClient
 import com.eyedroid.vpn.databinding.ActivityLoginBinding
 import com.eyedroid.vpn.ui.dashboard.DashboardActivity
+import com.eyedroid.vpn.util.DebugLogOverlay
 import com.eyedroid.vpn.util.SecurityCheck
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var b: ActivityLoginBinding
     private val vm: LoginViewModel by viewModels { LoginViewModelFactory(this) }
+    private var debugReceiver: BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.EyeDroidTheme) // dismiss splash, apply real theme
+        setTheme(R.style.EyeDroidTheme)
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         window.decorView.systemUiVisibility = (
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         )
+        RetrofitClient.init(applicationContext)
         b = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         b.tvTenantBadge.text = BuildConfig.TENANT_NAME
+        debugReceiver = DebugLogOverlay.register(this)
 
         SecurityCheck.run(this)
-
         vm.checkSession(onValid = ::goToDashboard, onInvalid = {})
 
         b.btnLogin.setOnClickListener {
@@ -54,6 +59,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        DebugLogOverlay.unregister(this, debugReceiver)
     }
 
     private fun goToDashboard() {
