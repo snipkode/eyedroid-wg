@@ -47,8 +47,17 @@ case "$CHOICE" in
   2) BUILD_TYPE="release" ;;
   3) BUILD_TYPE="both" ;;
   4) BUILD_TYPE="upload"
-     read -rp "▶ Upload URL      : " APK_UPLOAD_URL
-     read -rp "▶ JWT Token       : " APK_UPLOAD_TOKEN
+     APK_UPLOAD_URL="${APK_UPLOAD_URL:-http://perumdati.tech}"
+     read -rp "▶ Username        : " LOGIN_USER
+     read -rsp "▶ Password        : " LOGIN_PASS
+     echo ""
+     echo "🔐 Login ke $APK_UPLOAD_URL ..."
+     LOGIN_RESP=$(curl -sf -X POST "$APK_UPLOAD_URL/apio/api/auth/login" \
+       -H "Content-Type: application/json" \
+       -d "{\"tenantId\":\"system\",\"username\":\"$LOGIN_USER\",\"password\":\"$LOGIN_PASS\"}")
+     APK_UPLOAD_TOKEN=$(echo "$LOGIN_RESP" | python3 -c "import json,sys; print(json.load(sys.stdin)['token'])" 2>/dev/null || true)
+     [ -z "$APK_UPLOAD_TOKEN" ] && { echo "❌ Login gagal"; exit 1; }
+     echo "✅ Login berhasil"
      export APK_UPLOAD_URL APK_UPLOAD_TOKEN
      ;;
   *) echo "❌ Pilihan tidak valid"; exit 1 ;;
