@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Usage:
+#   ./build_apks.sh [OUTPUT_DIR]
+#
+# Upload mode (remote server):
+#   APK_UPLOAD_URL=http://perumdati.tech APK_UPLOAD_TOKEN=<jwt> ./build_apks.sh
+#
+# Default: copy APK locally to OUTPUT_DIR (or /root/scrcpy/public/apk/)
+
 BASE_URL="http://perumdati.tech/api"
 OUTPUT_DIR="${1:-/root/scrcpy/public/apk}"
 
@@ -18,22 +26,39 @@ if [ -z "$TENANTS" ]; then
 fi
 
 echo "✅ Tenants: $TENANTS"
-mkdir -p "$OUTPUT_DIR"
 
 # Build all flavors in one Gradle invocation
 cd "$(dirname "$0")"
 ./gradlew :ui:assembleRelease -PtenantFlavors="$TENANTS"
 
-# Copy APKs to output dir, named by tenant
+# Deploy APKs
 echo "$TENANTS" | tr ',' '\n' | while read -r TENANT; do
   FLAVOR=$(echo "$TENANT" | tr '-' '_')
   APK_SRC="ui/build/outputs/apk/${FLAVOR}/release/ui-${FLAVOR}-release.apk"
-  if [ -f "$APK_SRC" ]; then
+
+  if [ ! -f "$APK_SRC" ]; then
+    echo "⚠️  APK not found: $APK_SRC"
+    continue
+  fi
+
+  if [ -n "${APK_UPLOAD_URL:-}" ]; then
+    # Remote: upload via API
+    echo "⬆️  Uploading eyedroid-${TENANT}.apk to $APK_UPLOAD_URL ..."
+    HTTP=$(curl -sf -o /dev/null -w "%{http_code}" \
+      -X POST "$APK_UPLOAD_URL/api/admin/apk/$TENANT" \
+      -H "Authorization: Bearer ${APK_UPLOAD_TOKEN:-}" \
+      -F "file=@$APK_SRC")
+    if [ "$HTTP" = "200" ]; then
+      echo "✅ Uploaded: eyedroid-${TENANT}.apk"
+    else
+      echo "❌ Upload failed for $TENANT (HTTP $HTTP)"
+    fi
+  else
+    # Local: copy to output dir
+    mkdir -p "$OUTPUT_DIR"
     cp "$APK_SRC" "$OUTPUT_DIR/eyedroid-${TENANT}.apk"
     echo "📦 $OUTPUT_DIR/eyedroid-${TENANT}.apk"
-  else
-    echo "⚠️  APK not found: $APK_SRC"
   fi
 done
 
-echo "✅ Done. APKs in $OUTPUT_DIR"
+echo "✅ Done."
