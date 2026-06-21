@@ -23,7 +23,8 @@ data class UserInfo(
     val maxDevices: Int?
 )
 
-// Backend may return {"config":"..."} or plain text — handled in VpnRepository
-data class VpnConfigResponse(
-    val config: String?
+// Wrapper for /api/auth/me response
+data class MeResponse(
+    val success: Boolean,
+    val user: UserInfo
 )

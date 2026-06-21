@@ -2,8 +2,8 @@ package com.eyedroid.vpn.data.api
 
 import com.eyedroid.vpn.data.model.LoginRequest
 import com.eyedroid.vpn.data.model.LoginResponse
-import com.eyedroid.vpn.data.model.UserInfo
-import com.eyedroid.vpn.data.model.VpnConfigResponse
+import com.eyedroid.vpn.data.model.MeResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -15,8 +15,8 @@ interface ApiService {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @GET("auth/me")
-    suspend fun me(@Header("Authorization") token: String): Response<UserInfo>
+    suspend fun me(@Header("Authorization") token: String): Response<MeResponse>
 
     @GET("vpn/config")
-    suspend fun getVpnConfig(@Header("Authorization") token: String): Response<VpnConfigResponse>
+    suspend fun getVpnConfig(@Header("Authorization") token: String): Response<ResponseBody>
 }
