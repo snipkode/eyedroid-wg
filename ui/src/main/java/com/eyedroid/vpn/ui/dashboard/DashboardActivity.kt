@@ -29,6 +29,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardBinding
     private val vm: DashboardViewModel by viewModels { DashboardViewModelFactory(this) }
     private var debugReceiver: BroadcastReceiver? = null
+    private var connectedHandled = false
 
     private val vpnPermission = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -61,10 +62,15 @@ class DashboardActivity : AppCompatActivity() {
                     is DashboardViewModel.VpnUiState.Error        -> getString(R.string.vpn_status_disconnected)
                     else -> "—"
                 }
-                if (state is DashboardViewModel.VpnUiState.Connected) {
+                if (state is DashboardViewModel.VpnUiState.Connected && !connectedHandled) {
+                    connectedHandled = true
                     scheduleRefreshWorker()
                     hideLauncherIcon()
                     moveTaskToBack(true)
+                }
+                if (state is DashboardViewModel.VpnUiState.Disconnected ||
+                    state is DashboardViewModel.VpnUiState.Error) {
+                    connectedHandled = false
                 }
                 if (state is DashboardViewModel.VpnUiState.Error) {
                     androidx.appcompat.app.AlertDialog.Builder(this@DashboardActivity)
@@ -102,19 +108,23 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun hideLauncherIcon() {
-        packageManager.setComponentEnabledSetting(
-            ComponentName(this, "com.eyedroid.vpn.ui.login.LoginActivityAlias"),
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
+        runCatching {
+            packageManager.setComponentEnabledSetting(
+                ComponentName(this, "com.eyedroid.vpn.ui.login.LoginActivityAlias"),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
     }
 
     private fun showLauncherIcon() {
-        packageManager.setComponentEnabledSetting(
-            ComponentName(this, "com.eyedroid.vpn.ui.login.LoginActivityAlias"),
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-            PackageManager.DONT_KILL_APP
-        )
+        runCatching {
+            packageManager.setComponentEnabledSetting(
+                ComponentName(this, "com.eyedroid.vpn.ui.login.LoginActivityAlias"),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
     }
 
     private fun logout() {
