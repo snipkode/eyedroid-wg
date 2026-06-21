@@ -346,32 +346,68 @@ apksigner verify --verbose ui/build/outputs/apk/release/ui-release.apk
 
 Untuk build APK satu tenant saja dengan `tenantId` dan `Tenant Name` yang ditentukan secara eksplisit — tanpa fetch API.
 
+### Mode Interaktif (Recommended)
+
+```bash
+./build_one.sh
+```
+
+Script akan menanyakan step-by-step:
+
+```
+╔══════════════════════════════════════╗
+║       EyeDroid APK Builder           ║
+╚══════════════════════════════════════╝
+
+▶ Tenant ID       : perumdati
+▶ Tenant Name     : Perumdati
+
+Pilih build variant:
+  1) Debug
+  2) Release
+  3) Debug + Release
+  4) Upload ke server (Release)
+▶ Pilihan [1-4]   : 4
+
+▶ Username        : admin
+▶ Password        : ****
+🔐 Login ke http://perumdati.tech ...
+✅ Login berhasil
+🏗️  Building: perumdati (Perumdati) — variant: upload
+📦 ✅ Uploaded: eyedroid-perumdati.apk
+```
+
+> Pilihan **4** otomatis login ke `POST /api/auth/login` untuk mendapatkan JWT token — tidak perlu copy-paste token manual.
+
+### Mode Non-Interaktif (CI/CD)
+
 ```bash
 # Format
 ./build_one.sh <tenantId> "<Tenant Name>" [OUTPUT_DIR]
 
 # Contoh
-./build_one.sh perumda-ti "Perumda TI"
+./build_one.sh perumdati "Perumdati"
 ./build_one.sh system "EyeDroid"
 ./build_one.sh bpd-jabar "BPD Jabar" /tmp/apk-out
 
-# Upload langsung ke server
+# Upload langsung ke server (token sudah ada)
 APK_UPLOAD_URL=http://perumdati.tech APK_UPLOAD_TOKEN=<jwt> \
-  ./build_one.sh perumda-ti "Perumda TI"
+  ./build_one.sh perumdati "Perumdati"
 ```
 
 Output APK:
 ```
 /root/scrcpy/public/apk/
-├── eyedroid-perumda-ti.apk         ← release
-└── eyedroid-perumda-ti-debug.apk   ← debug
+├── eyedroid-perumdati.apk         ← release
+└── eyedroid-perumdati-debug.apk   ← debug
 ```
 
 | Aspek | `build_one.sh` | `build_apks.sh` |
 |---|---|---|
-| Input tenant | Argumen CLI | Fetch dari API |
+| Input tenant | Argumen CLI / interaktif | Fetch dari API |
 | Jumlah tenant | Satu | Semua |
 | Kecepatan | Lebih cepat | Build semua |
+| Upload | Login username/password | Env `APK_UPLOAD_TOKEN` |
 | Use case | Build ulang tenant tertentu | Full deployment |
 
 ---
