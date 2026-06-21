@@ -7,6 +7,7 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.databinding.ActivityLoginBinding
 import com.eyedroid.vpn.ui.dashboard.DashboardActivity
 import com.eyedroid.vpn.util.SecurityCheck
@@ -19,16 +20,17 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        )
         b = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        b.tvTenantBadge.text = BuildConfig.TENANT_NAME
+
         SecurityCheck.run(this)
 
-        // Auto-login if valid session exists
-        vm.checkSession(
-            onValid = ::goToDashboard,
-            onInvalid = {}
-        )
+        vm.checkSession(onValid = ::goToDashboard, onInvalid = {})
 
         b.btnLogin.setOnClickListener {
             val user = b.etUsername.text?.toString()?.trim() ?: ""

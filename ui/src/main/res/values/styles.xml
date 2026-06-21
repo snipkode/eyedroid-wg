@@ -46,4 +46,20 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!-- EyeDroid fullscreen dark theme — no action bar, transparent status bar -->
+    <style name="EyeDroidTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/ed_bg</item>
+        <item name="android:colorBackground">@color/ed_bg</item>
+        <item name="colorPrimary">@color/ed_accent</item>
+        <item name="colorSurface">@color/ed_surface</item>
+        <item name="colorOnSurface">@color/ed_text_primary</item>
+        <item name="colorOutline">@color/ed_border</item>
+        <item name="colorOnPrimary">@color/ed_text_primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="materialCardViewStyle">@style/WireGuardTheme.MaterialCardView</item>
+    </style>
 </resources>

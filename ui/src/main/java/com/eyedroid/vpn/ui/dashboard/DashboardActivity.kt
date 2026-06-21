@@ -3,11 +3,13 @@ package com.eyedroid.vpn.ui.dashboard
 import android.content.Intent
 import android.net.VpnService
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.eyedroid.vpn.BuildConfig
 import com.eyedroid.vpn.R
 import com.eyedroid.vpn.databinding.ActivityDashboardBinding
 import com.eyedroid.vpn.ui.login.LoginActivity
@@ -24,11 +26,15 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        )
         b = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        b.tvTenantName.text = BuildConfig.TENANT_NAME
         b.tvUsername.text = vm.session.username ?: "—"
-        b.tvRole.text = vm.session.role ?: "user"
+        b.tvRole.text = (vm.session.role ?: "user").uppercase()
 
         b.btnConnect.setOnClickListener { requestVpnAndConnect() }
         b.btnDisconnect.setOnClickListener { vm.disconnect() }
@@ -38,12 +44,9 @@ class DashboardActivity : AppCompatActivity() {
         lifecycleScope.launch {
             vm.vpnState.collect { state ->
                 b.tvVpnStatus.text = when (state) {
-                    is DashboardViewModel.VpnUiState.Connecting ->
-                        getString(R.string.vpn_status_connecting)
-                    is DashboardViewModel.VpnUiState.Connected ->
-                        getString(R.string.vpn_status_connected)
-                    is DashboardViewModel.VpnUiState.Disconnected ->
-                        getString(R.string.vpn_status_disconnected)
+                    is DashboardViewModel.VpnUiState.Connecting -> getString(R.string.vpn_status_connecting)
+                    is DashboardViewModel.VpnUiState.Connected  -> getString(R.string.vpn_status_connected)
+                    is DashboardViewModel.VpnUiState.Disconnected -> getString(R.string.vpn_status_disconnected)
                     is DashboardViewModel.VpnUiState.Error -> state.msg
                     else -> "—"
                 }
@@ -55,7 +58,6 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        // Auto connect on launch
         requestVpnAndConnect()
     }
 

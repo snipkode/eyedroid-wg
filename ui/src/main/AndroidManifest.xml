@@ -33,6 +33,7 @@
         <activity
             android:name="com.eyedroid.vpn.ui.login.LoginActivity"
             android:exported="true"
+            android:theme="@style/EyeDroidTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +43,8 @@
 
         <activity
             android:name="com.eyedroid.vpn.ui.dashboard.DashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/EyeDroidTheme" />
 
         <!-- WireGuard internal: TunnelToggleActivity (used by quick settings) -->
         <activity

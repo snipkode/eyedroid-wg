@@ -25,14 +25,19 @@ android {
     }
     flavorDimensions += "tenant"
     productFlavors {
-        // Flavors injected dynamically by build_apks.sh via tenantFlavors property
+        // Flavors injected dynamically by build_apks.sh via tenantFlavors + tenantNames properties
         val flavors = providers.gradleProperty("tenantFlavors").orNull
             ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
             ?: listOf("system")
-        flavors.forEach { tenantId ->
+        val names = providers.gradleProperty("tenantNames").orNull
+            ?.split("|")?.map { it.trim() }?.filter { it.isNotEmpty() }
+            ?: listOf("EyeDroid")
+        flavors.forEachIndexed { idx, tenantId ->
+            val tenantName = names.getOrElse(idx) { tenantId }
             create(tenantId.replace("-", "_")) {
                 dimension = "tenant"
                 buildConfigField("String", "TENANT_ID", "\"$tenantId\"")
+                buildConfigField("String", "TENANT_NAME", "\"$tenantName\"")
             }
         }
     }
