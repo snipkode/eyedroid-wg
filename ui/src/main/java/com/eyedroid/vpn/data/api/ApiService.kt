@@ -11,12 +11,12 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
-    @POST("api/auth/login")
+    @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
-    @GET("api/auth/me")
+    @GET("auth/me")
     suspend fun me(@Header("Authorization") token: String): Response<UserInfo>
 
-    @GET("api/vpn/config")
+    @GET("vpn/config")
     suspend fun getVpnConfig(@Header("Authorization") token: String): Response<VpnConfigResponse>
 }
