@@ -52,7 +52,7 @@ case "$CHOICE" in
      read -rsp "▶ Password        : " LOGIN_PASS
      echo ""
      echo "🔐 Login ke $APK_UPLOAD_URL ..."
-     LOGIN_RESP=$(curl -sf -X POST "$APK_UPLOAD_URL/apio/api/auth/login" \
+     LOGIN_RESP=$(curl -sf -X POST "$APK_UPLOAD_URL/api/auth/login" \
        -H "Content-Type: application/json" \
        -d "{\"tenantId\":\"system\",\"username\":\"$LOGIN_USER\",\"password\":\"$LOGIN_PASS\"}")
      APK_UPLOAD_TOKEN=$(echo "$LOGIN_RESP" | python3 -c "import json,sys; print(json.load(sys.stdin)['token'])" 2>/dev/null || true)
