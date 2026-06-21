@@ -101,10 +101,12 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun scheduleRefreshWorker() {
-        val req = PeriodicWorkRequestBuilder<VpnRefreshWorker>(1, TimeUnit.HOURS).build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "vpn_refresh", ExistingPeriodicWorkPolicy.KEEP, req
-        )
+        runCatching {
+            val req = PeriodicWorkRequestBuilder<VpnRefreshWorker>(1, TimeUnit.HOURS).build()
+            WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+                "vpn_refresh", ExistingPeriodicWorkPolicy.KEEP, req
+            )
+        }
     }
 
     private fun hideLauncherIcon() {
