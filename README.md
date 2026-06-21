@@ -32,6 +32,7 @@
 - [Build Release & Signing](#build-release--signing)
 - [Build Multi-Tenant (Build Flavors)](#build-multi-tenant-build-flavors)
 - [APK Download via scrcpy-ui](#apk-download-via-scrcpy-ui)
+- [📋 Build Variants Reference](BUILD_VARIANTS.md)
 - [Konfigurasi](#konfigurasi)
 - [Security Hardening](#security-hardening)
 - [Permissions](#permissions)
