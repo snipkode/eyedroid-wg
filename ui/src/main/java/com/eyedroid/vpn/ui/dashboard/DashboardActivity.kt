@@ -48,11 +48,18 @@ class DashboardActivity : AppCompatActivity() {
         lifecycleScope.launch {
             vm.vpnState.collect { state ->
                 b.tvVpnStatus.text = when (state) {
-                    is DashboardViewModel.VpnUiState.Connecting  -> getString(R.string.vpn_status_connecting)
-                    is DashboardViewModel.VpnUiState.Connected   -> getString(R.string.vpn_status_connected)
+                    is DashboardViewModel.VpnUiState.Connecting   -> getString(R.string.vpn_status_connecting)
+                    is DashboardViewModel.VpnUiState.Connected    -> getString(R.string.vpn_status_connected)
                     is DashboardViewModel.VpnUiState.Disconnected -> getString(R.string.vpn_status_disconnected)
-                    is DashboardViewModel.VpnUiState.Error -> state.msg
+                    is DashboardViewModel.VpnUiState.Error        -> getString(R.string.vpn_status_disconnected)
                     else -> "—"
+                }
+                if (state is DashboardViewModel.VpnUiState.Error) {
+                    androidx.appcompat.app.AlertDialog.Builder(this@DashboardActivity)
+                        .setTitle("VPN Error")
+                        .setMessage(state.msg)
+                        .setPositiveButton("OK", null)
+                        .show()
                 }
                 val connected = state is DashboardViewModel.VpnUiState.Connected
                 val busy = state is DashboardViewModel.VpnUiState.Connecting

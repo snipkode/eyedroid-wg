@@ -51,7 +51,14 @@ class LoginActivity : AppCompatActivity() {
                     if (state is LoginViewModel.State.Loading) View.VISIBLE else View.GONE
                 when (state) {
                     is LoginViewModel.State.Success -> goToDashboard()
-                    is LoginViewModel.State.Error -> b.tilPassword.error = state.msg
+                    is LoginViewModel.State.Error -> {
+                        b.tilPassword.error = " "
+                        androidx.appcompat.app.AlertDialog.Builder(this@LoginActivity)
+                            .setTitle("Login Gagal")
+                            .setMessage(state.msg)
+                            .setPositiveButton("OK") { _, _ -> b.tilPassword.error = null }
+                            .show()
+                    }
                     else -> {}
                 }
             }

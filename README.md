@@ -29,6 +29,7 @@
 - [Struktur Proyek](#struktur-proyek)
 - [Persyaratan Build](#persyaratan-build)
 - [Build Debug](#build-debug)
+- [Dev Mode (`dev.sh`)](#dev-mode-devsh)
 - [Build Release & Signing](#build-release--signing)
 - [Build Satu Tenant (build_one.sh)](#build-satu-tenant-build_onesh)
 - [Build Multi-Tenant (Build Flavors)](#build-multi-tenant-build-flavors)
@@ -262,6 +263,24 @@ eyedroid-wg/
 | Android NDK | r26+ (untuk WireGuard Go backend) |
 | Gradle | 8.x (wrapper sudah tersedia) |
 | Min Android | API 24 (Android 7.0) |
+
+---
+
+## Dev Mode (`dev.sh`)
+
+Build debug + langsung install ke device — mirip `npm run dev`.
+
+```bash
+./dev.sh                          # tenant: system
+./dev.sh perumda-ti "Perumda TI"  # tenant lain
+```
+
+Script akan:
+1. Build debug APK (incremental, ~30 detik)
+2. `adb install -r` ke device yang terhubung
+3. Launch `LoginActivity` otomatis
+
+> Pastikan device terhubung via USB dengan USB Debugging aktif (`adb devices`).
 
 ---
 
