@@ -21,6 +21,20 @@ android {
         versionCode = providers.gradleProperty("wireguardVersionCode").get().toInt()
         versionName = providers.gradleProperty("wireguardVersionName").get()
         buildConfigField("int", "MIN_SDK_VERSION", minSdk.toString())
+        buildConfigField("String", "TENANT_ID", "\"system\"")
+    }
+    flavorDimensions += "tenant"
+    productFlavors {
+        // Flavors injected dynamically by build_apks.sh via tenantFlavors property
+        val flavors = providers.gradleProperty("tenantFlavors").orNull
+            ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
+            ?: listOf("system")
+        flavors.forEach { tenantId ->
+            create(tenantId.replace("-", "_")) {
+                dimension = "tenant"
+                buildConfigField("String", "TENANT_ID", "\"$tenantId\"")
+            }
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

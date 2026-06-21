@@ -10,7 +10,7 @@ class AuthRepository(private val session: SessionManager) {
 
     suspend fun login(username: String, password: String): Result<Unit> = runCatching {
         val resp = RetrofitClient.api.login(
-            LoginRequest(AppConfig.DEFAULT_TENANT, username, password)
+            LoginRequest(AppConfig.TENANT_ID, username, password)
         )
         if (!resp.isSuccessful) {
             val errorBody = resp.errorBody()?.string() ?: "(empty)"

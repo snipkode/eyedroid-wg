@@ -30,6 +30,8 @@
 - [Persyaratan Build](#persyaratan-build)
 - [Build Debug](#build-debug)
 - [Build Release & Signing](#build-release--signing)
+- [Build Multi-Tenant (Build Flavors)](#build-multi-tenant-build-flavors)
+- [APK Download via scrcpy-ui](#apk-download-via-scrcpy-ui)
 - [Konfigurasi](#konfigurasi)
 - [Security Hardening](#security-hardening)
 - [Permissions](#permissions)
@@ -334,6 +336,77 @@ export KEY_PASS=your_key_password
 
 ```bash
 apksigner verify --verbose ui/build/outputs/apk/release/ui-release.apk
+```
+
+---
+
+## Build Multi-Tenant (Build Flavors)
+
+Setiap tenant mendapat APK tersendiri dengan `tenantId` yang sudah tertanam di dalam binary (via `BuildConfig.TENANT_ID`). Build semua tenant dilakukan dalam **satu perintah** menggunakan script `build_apks.sh`.
+
+### Cara Kerja
+
+```
+build_apks.sh
+    │
+    ▼
+GET http://perumdati.tech/api/auth/tenants
+    │  → ["system", "perumda-ti", ...]
+    ▼
+./gradlew :ui:assembleRelease -PtenantFlavors="system,perumda-ti"
+    │
+    ├─ ui-system-release.apk        (BuildConfig.TENANT_ID = "system")
+    └─ ui-perumda_ti-release.apk    (BuildConfig.TENANT_ID = "perumda-ti")
+    │
+    ▼
+/root/scrcpy/public/apk/
+    ├─ eyedroid-system.apk
+    └─ eyedroid-perumda-ti.apk
+```
+
+### Jalankan Build
+
+```bash
+cd /root/eyedroid-wg-apk
+./build_apks.sh
+
+# Output APK default ke /root/scrcpy/public/apk/
+# Atau tentukan folder output:
+./build_apks.sh /path/to/output
+```
+
+> Script otomatis fetch daftar tenant terbaru dari API — tidak perlu update manual saat tenant baru ditambahkan.
+
+### Tenant Baru Otomatis
+
+Saat tenant baru dibuat via scrcpy-ui, cukup jalankan ulang `build_apks.sh`. APK baru akan ter-build dan langsung tersedia untuk didownload.
+
+---
+
+## APK Download via scrcpy-ui
+
+APK per-tenant tersedia untuk didownload langsung dari halaman **Tenant Management** di scrcpy-ui.
+
+### Endpoint Download
+
+```
+GET /apk/:tenantId
+```
+
+Contoh:
+```
+http://perumdati.tech/apk/perumda-ti   → eyedroid-perumda-ti.apk
+http://perumdati.tech/apk/system       → eyedroid-system.apk
+```
+
+### UI
+
+Di halaman **Tenant Management**, setiap baris tenant memiliki tombol 📥 (Download) yang langsung mendownload APK untuk tenant tersebut. APK hanya tersedia setelah `build_apks.sh` dijalankan.
+
+### File APK disimpan di
+
+```
+/root/scrcpy/public/apk/eyedroid-{tenantId}.apk
 ```
 
 ---
